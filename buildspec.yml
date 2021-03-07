@@ -3,7 +3,7 @@ phases:
   pre_build:
     commands:
       # https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/sample-docker.html
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       # https://dev.classmethod.jp/articles/codebuild-has-to-use-dockerhub-login-to-avoid-ip-gacha/
       - echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
   build:
