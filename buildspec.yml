@@ -1,9 +1,15 @@
 version: 0.2
 phases:
+  pre_build:
+    commands:
+      # https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/sample-docker.html
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      # https://dev.classmethod.jp/articles/codebuild-has-to-use-dockerhub-login-to-avoid-ip-gacha/
+      - echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
   build:
     commands:
-      - aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION
-      - echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USER --password-stdin
       - docker-compose -p flutter_web_firebase_hosting build
-      - docker tag flutter_web_firebase_hosting_flutter:latest $CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flutter_web_firebase_hosting:latest
-      - docker push $CODEBUILD_WEBHOOK_ACTOR_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flutter_web_firebase_hosting_flutter
+      - docker tag flutter_web_firebase_hosting_flutter:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flutter_web_firebase_hosting:latest
+  post_build:
+    commands:
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flutter_web_firebase_hosting_flutter
