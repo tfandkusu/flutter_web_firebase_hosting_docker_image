@@ -12,4 +12,4 @@ phases:
       - docker tag flutter_web_firebase_hosting_flutter:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flutter_web_firebase_hosting:latest
   post_build:
     commands:
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flutter_web_firebase_hosting_flutter
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/flutter_web_firebase_hosting
